@@ -3,34 +3,46 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.*;
 import java.util.*;
 
-public class partie0 {
 
-    public static List<String> listFilesForFolder(final File folder)  {
+public class jls {
+    public static List<String> listFilesForFolder(final File folder) throws IOException {
         var list = new ArrayList<String>();
-
         if(folder.exists()){
             for (final File fileEntry : Objects.requireNonNull(folder.listFiles())) {
-                if (fileEntry.isDirectory()) {
-                    listFilesForFolder(fileEntry);
-                } else {
-                    var pathFile = fileEntry.getAbsolutePath();
-                    list.add(pathFile);
-                    var packageName = fileEntry.getParentFile();
-                    list.add(packageName.toString());
+                if (fileEntry.isFile()) {
+                    var filePath = fileEntry.getAbsolutePath();
+                    list.add(filePath);
+                    var packagePath = fileEntry.getParentFile();
+                    list.add(packagePath.toString());
                     var fileName = FilenameUtils.removeExtension(fileEntry.getName());
                     list.add(fileName);
+
+                } else if (fileEntry.isDirectory()) {
+                    File[] childFile = fileEntry.listFiles();
+                    for (int i = 0; i < childFile.length; i++){
+                        var filePath = childFile[i].getAbsolutePath();
+                        list.add(filePath);
+                        var packagePath = childFile[i].getParentFile();
+                        list.add(packagePath.toString());
+                        var fileName = FilenameUtils.removeExtension(childFile[i].getName());
+                        list.add(fileName);
+                    }
                 }
+
             }
 
-        } else{
-            System.out.println("votre chemin est invalide");
+        } else {
+            System.out.println("Votre chemin est invalide");
         }
 
         return list;
     }
 
 
+
+
 //
+
 //    public static List<String[]> createDataCsv(File folder) {
 //        List<String[]> listData = new ArrayList<>();
 //        var line  = separate(listFilesForFolder(folder),3);
@@ -77,9 +89,11 @@ public class partie0 {
 
 
     public static void main(String[] args) throws Exception {
-        final File folder = new File("C:\\Users\\Chaima\\Downloads\\ckjm-master\\ckjm-master\\src\\gr\\spinellis\\ckjm");
+        final File folder = new File("/Users/biancabica/Downloads/ckjm-master/src/gr/spinellis/ckjm");
         System.out.println(listFilesForFolder(folder));
         //createDataCsv(folder);
         //    csvFormat(folder);
+       // System.out.println(listeFinale);
+
     }
 }
