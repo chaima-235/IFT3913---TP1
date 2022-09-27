@@ -39,8 +39,7 @@ public class Jls {
         return list;
     }
 
-    public static void csvFormat(File folder) {
-        try {
+    public static File csvFormat(File folder) throws IOException {
 
             File csvFile = new File("src/main/resourcesCsv","file.csv");
             FileWriter fileWriter = new FileWriter(csvFile);
@@ -52,13 +51,11 @@ public class Jls {
                     line.append(';');
                 }
             }
+
             line.append("\n");
             fileWriter.write(line.toString());
             fileWriter.close();
-        }catch (Exception e){
-            System.out.println("une erreur lors du chargement du fichier ");
-
-        }
+        return csvFile;
     }
 
     }
