@@ -1,12 +1,18 @@
+import org.apache.commons.io.FilenameUtils;
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Lsec {
+    private static  Jls jls;
+    private static Pattern csvRE;
 
     public static String readFile (String filePath)
     {
@@ -43,5 +49,99 @@ public class Lsec {
     }
     return pathList;
 }
+public static List<String> getNames (File folder , List<Path> listPaths ) {
+          var lists = new ArrayList<String>();
+    for (Path listPath : listPaths) {
+        lists.add(FilenameUtils.removeExtension(listPath.getFileName().toString()));
+    }
+          return lists;
+}
+
+ public static HashMap<String,Integer> principale(File folder) throws IOException {
+        var listPath = getPathFiles(folder);
+        var nameFile = getNames(folder,listPath);
+        var result = new HashMap<String,Integer>();
+        Integer csec = 0;
+     for (Path path : listPath) {
+        for (String s : nameFile) {
+            var fileActual = FilenameUtils.removeExtension(path.getFileName().toString());
+            if (!s.equals(fileActual)) {
+                if (findWord(readFile(path.toString()), s)) {
+                    csec+=1;
+                    result.put(fileActual,csec);
+                }
+            }
+        }
+        csec=0;
+    }
+    return result;
+}
+
+
+    public static List<String> readFileCsv(File pathCsvInitial) {
+        try {
+             var data = new ArrayList<String>();//list of lists to store data
+             FileReader fr = new FileReader(pathCsvInitial);
+             BufferedReader br = new BufferedReader(fr);
+             String line;
+            while((line = br.readLine()) != null)
+            {
+                data.add(line);
+            }
+            data.add(";");
+            return data;
+        }
+        catch(Exception e) {
+            System.out.print(e);
+            return new ArrayList<>() ;
+        }
+    }
+
+    public static HashMap<String,Integer> csecFinal(File folder,File fileCsvInitial) throws IOException {
+        var hash = principale(folder);
+        var hashfinal = new HashMap<String,Integer>();
+        var contentFileCsvPrincipal = readFileCsv(fileCsvInitial);
+        for (Map.Entry<String, Integer> entry : hash.entrySet()) {
+            for (String s : contentFileCsvPrincipal) {
+                if (findWord(s, entry.getKey())) {
+                    hashfinal.put(s, entry.getValue());
+                }
+            }
+        }
+        return hashfinal;
+    }
+
+    public static File creationFileCsec (File pathFolder , File fileCsvInitial) throws IOException {
+        File csvFile = new File("src/main/resourcesCsv","fileCsec.csv");
+        FileWriter fileWriter = new FileWriter(csvFile);
+        var data  = csecFinal(pathFolder,fileCsvInitial);
+        List<String> dataCsv = new ArrayList<>();
+        StringBuilder dataFinal = new StringBuilder();
+        String line;
+        for (Map.Entry<String, Integer> entry : data.entrySet()) {
+            line = entry.getKey() + entry.getValue();
+            dataCsv.add(line);
+        }
+        System.out.println("liste string "+ dataCsv);
+        for (int i = 0; i < dataCsv.size(); i++) {
+            dataFinal.append(dataCsv.get(i));
+            if (i != dataCsv.size() - 1) {
+                dataFinal.append(';');
+                dataFinal.append("\n");
+            }
+
+            }
+        dataFinal.append("\n");
+
+        fileWriter.write(dataFinal.toString());
+        fileWriter.close();
+        return csvFile;
+    }
 
 }
+
+
+
+
+
+

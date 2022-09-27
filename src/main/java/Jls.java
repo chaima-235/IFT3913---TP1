@@ -47,10 +47,12 @@ public class Jls {
             StringBuilder line = new StringBuilder();
             for (int i = 0; i < data.size(); i++) {
                 line.append(data.get(i));
-                if (i != data.size() - 1) {
                     line.append(';');
+                if (((i+1) % 3) == 0) {
+                    line.append("\n");
                 }
             }
+
 
             line.append("\n");
             fileWriter.write(line.toString());
