@@ -1,8 +1,6 @@
-import org.apache.commons.io.FilenameUtils;
 import java.io.*;
-import java.util.Scanner;
 
-public class nvloc {
+public class Nvloc {
 
     public static int nboflines(File file) throws IOException {
         BufferedReader buffread = new BufferedReader(new FileReader(file));
@@ -13,11 +11,5 @@ public class nvloc {
                 nbloc++;
         }
         return nbloc;
-    }
-
-
-    public static void main(String[] args) throws IOException {
-        File file = new File("/Users/biancabica/Downloads/ckjm-master/src/gr/spinellis/ckjm/bilel.java");
-        System.out.println(nboflines(file));
     }
 }
