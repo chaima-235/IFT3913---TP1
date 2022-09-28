@@ -33,7 +33,7 @@ public class Lsec {
 
     public static boolean findWord (String paragraphe , String mot){
         if(mot!= null && mot.length()!=0){
-          return paragraphe.contains(mot);
+            return paragraphe.contains(mot);
         } else {
             System.out.println("The Keyword :example: is not found in the string");
             return false;
@@ -41,49 +41,49 @@ public class Lsec {
     }
 
     public static List<Path> getPathFiles(File folder) throws IOException {
-         List<Path> pathList;
-    try (Stream<Path> stream = Files.walk(Paths.get(String.valueOf(folder)))) {
-        pathList = stream.map(Path::normalize)
-                .filter(Files::isRegularFile)
-                .collect(Collectors.toList());
+        List<Path> pathList;
+        try (Stream<Path> stream = Files.walk(Paths.get(String.valueOf(folder)))) {
+            pathList = stream.map(Path::normalize)
+                    .filter(Files::isRegularFile)
+                    .collect(Collectors.toList());
+        }
+        return pathList;
     }
-    return pathList;
-}
-public static List<String> getNames (File folder , List<Path> listPaths ) {
-          var lists = new ArrayList<String>();
-    for (Path listPath : listPaths) {
-        lists.add(FilenameUtils.removeExtension(listPath.getFileName().toString()));
+    public static List<String> getNames (File folder , List<Path> listPaths ) {
+        var lists = new ArrayList<String>();
+        for (Path listPath : listPaths) {
+            lists.add(FilenameUtils.removeExtension(listPath.getFileName().toString()));
+        }
+        return lists;
     }
-          return lists;
-}
 
- public static HashMap<String,Integer> principale(File folder) throws IOException {
+    public static HashMap<String,Double> principale(File folder) throws IOException {
         var listPath = getPathFiles(folder);
         var nameFile = getNames(folder,listPath);
-        var result = new HashMap<String,Integer>();
-        Integer csec = 0;
-     for (Path path : listPath) {
-        for (String s : nameFile) {
-            var fileActual = FilenameUtils.removeExtension(path.getFileName().toString());
-            if (!s.equals(fileActual)) {
-                if (findWord(readFile(path.toString()), s)) {
-                    csec+=1;
-                    result.put(fileActual,csec);
+        var result = new HashMap<String,Double>();
+        Double csec = 0.0;
+        for (Path path : listPath) {
+            for (String s : nameFile) {
+                var fileActual = FilenameUtils.removeExtension(path.getFileName().toString());
+                if (!s.equals(fileActual)) {
+                    if (findWord(readFile(path.toString()), s)) {
+                        csec+=1;
+                        result.put(fileActual,csec);
+                    }
                 }
             }
+            csec=0.0;
         }
-        csec=0;
+        return result;
     }
-    return result;
-}
 
 
     public static List<String> readFileCsv(File pathCsvInitial) {
         try {
-             var data = new ArrayList<String>();//list of lists to store data
-             FileReader fr = new FileReader(pathCsvInitial);
-             BufferedReader br = new BufferedReader(fr);
-             String line;
+            var data = new ArrayList<String>();//list of lists to store data
+            FileReader fr = new FileReader(pathCsvInitial);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
             while((line = br.readLine()) != null)
             {
                 data.add(line);
@@ -97,11 +97,11 @@ public static List<String> getNames (File folder , List<Path> listPaths ) {
         }
     }
 
-    public static HashMap<String,Integer> csecFinal(File folder,File fileCsvInitial) throws IOException {
+    public static HashMap<String,Double> csecFinal(File folder,File fileCsvInitial) throws IOException {
         var hash = principale(folder);
-        var hashfinal = new HashMap<String,Integer>();
+        var hashfinal = new HashMap<String,Double>();
         var contentFileCsvPrincipal = readFileCsv(fileCsvInitial);
-        for (Map.Entry<String, Integer> entry : hash.entrySet()) {
+        for (Map.Entry<String, Double> entry : hash.entrySet()) {
             for (String s : contentFileCsvPrincipal) {
                 if (findWord(s, entry.getKey())) {
                     hashfinal.put(s, entry.getValue());
@@ -118,7 +118,7 @@ public static List<String> getNames (File folder , List<Path> listPaths ) {
         List<String> dataCsv = new ArrayList<>();
         StringBuilder dataFinal = new StringBuilder();
         String line;
-        for (Map.Entry<String, Integer> entry : data.entrySet()) {
+        for (Map.Entry<String, Double> entry : data.entrySet()) {
             line = entry.getKey() + entry.getValue();
             dataCsv.add(line);
         }
@@ -130,7 +130,8 @@ public static List<String> getNames (File folder , List<Path> listPaths ) {
                 dataFinal.append("\n");
             }
 
-            }
+        }
+        dataFinal.append(';');
         dataFinal.append("\n");
 
         fileWriter.write(dataFinal.toString());
@@ -139,9 +140,3 @@ public static List<String> getNames (File folder , List<Path> listPaths ) {
     }
 
 }
-
-
-
-
-
-
