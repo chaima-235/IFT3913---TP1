@@ -112,7 +112,8 @@ public class Lsec {
     }
 
     public static File creationFileCsec (File pathFolder , File fileCsvInitial) throws IOException {
-        File csvFile = new File("src/main/resourcesCsv","fileCsec.csv");
+        final String currentPath = Paths.get("").toAbsolutePath().toString();
+        File csvFile = new File(currentPath,"fileCsec.csv");
         FileWriter fileWriter = new FileWriter(csvFile);
         var data  = csecFinal(pathFolder,fileCsvInitial);
         List<String> dataCsv = new ArrayList<>();

@@ -1,6 +1,7 @@
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -40,8 +41,8 @@ public class Jls {
     }
 
     public static File csvFormat(File folder) throws IOException {
-
-            File csvFile = new File("src/main/resourcesCsv","file.csv");
+            final String currentPath = Paths.get("").toAbsolutePath().toString();
+            File csvFile = new File(currentPath,"file.csv");
             FileWriter fileWriter = new FileWriter(csvFile);
             var data = listFilesForFolder(folder);
             StringBuilder line = new StringBuilder();

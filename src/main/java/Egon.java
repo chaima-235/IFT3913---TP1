@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
     public class Egon {
@@ -86,7 +87,8 @@ import java.util.*;
             return hashNvloc;
         }
         public static File creationFileEgon (File pathFolder , File fileCsvCsec) throws IOException {
-            File csvFile = new File("src/main/resourcesCsv","fileEgon.csv");
+            final String currentPath = Paths.get("").toAbsolutePath().toString();
+            File csvFile = new File(currentPath,"fileEgon.csv");
             FileWriter fileWriter = new FileWriter(csvFile);
             var data  = filesNVLOC(pathFolder,fileCsvCsec);
             List<String> dataCsv = new ArrayList<>();

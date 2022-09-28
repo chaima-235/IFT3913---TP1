@@ -1,5 +1,8 @@
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 public class Service {
     private static Jls jls;
@@ -10,26 +13,26 @@ public class Service {
 
     public static void main(String[] args) throws IOException {
         final File folder = new File("/Users/biancabica/Downloads/ckjm-master/src/gr/spinellis/ckjm");
-        final File folderFileCsv = new File("/Users/biancabica/IFT3913/IFT3913---TP1/src/main/resourcesCsv/file.csv");
-        final File folderFileCsvCsec = new File("/Users/biancabica/IFT3913/IFT3913---TP1/src/main/resourcesCsv/fileCsec.csv");
-        final File folder1 = new File("/Users/biancabica/IFT3913/IFT3913---TP1/src/main/resourcesCsv");
-
-        Egon.creationFileEgon(folder,folderFileCsvCsec);
-        Egon.filesNVLOC(folder,folderFileCsvCsec);
-        System.out.println(Egon.getCsec(folder,folderFileCsvCsec));
-        System.out.println(Egon.getNvloc(Lsec.getPathFiles(folder)));
-        System.out.println(Egon.getNvlocPourcentage(folder));
-        System.out.println(Egon.getCsecPourcentage(folder,folderFileCsvCsec));
+        final String currentPath = Paths.get("").toAbsolutePath().toString();
+        var pathCsv = new File(currentPath);
 
 
-        System.out.println(Lsec.findWord("je suis tres contente , on va reussir","tres"));
+    //  Egon.creationFileEgon(folder, pathEgon.listFiles()[2]);
+       // Egon.filesNVLOC(folder,folderFileCsvCsec);
+       // System.out.println(Egon.getCsec(folder,folderFileCsvCsec));
+       // System.out.println(Egon.getNvloc(Lsec.getPathFiles(folder)));
+       // System.out.println(Egon.getNvlocPourcentage(folder));
+       // System.out.println(Egon.getCsecPourcentage(folder,folderFileCsvCsec));
+
+
+      //  System.out.println(Lsec.findWord("je suis tres contente , on va reussir","tres"));
        // System.out.println(Lsec.principale(folder,folderFileCsv));
-        Jls.csvFormat(folder);
-        System.out.println(Lsec.csecFinal(folder,folderFileCsv));
-        System.out.println(Lsec.creationFileCsec(folder,folderFileCsv));
+       Jls.csvFormat(folder);
+        //System.out.println(Lsec.csecFinal(folder,folderFileCsv));
+       System.out.println(Lsec.creationFileCsec(folder, Objects.requireNonNull(pathCsv.listFiles())[1]));
 
-        Lsec.readFileCsv(folderFileCsv);
-        System.out.println(Lsec.readFileCsv(new File(folderFileCsv.toURI())));
+        //Lsec.readFileCsv(folderFileCsv);
+       // System.out.println(Lsec.readFileCsv(new File(folderFileCsv.toURI())));
         //Egon.filesNVLOC(new File("C:\\Users\\Chaima\\Desktop\\ckjm-master\\src\\gr\\spinellis\\ckjm"));
     }
 }
