@@ -1,6 +1,7 @@
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -10,27 +11,13 @@ public class Jls {
     public static List<String> listFilesForFolder(final File folder) throws IOException {
         var list = new ArrayList<String>();
         if(folder.exists()){
-            for (final File fileEntry : Objects.requireNonNull(folder.listFiles())) {
-                if (fileEntry.isFile()) {
-                    var filePath = fileEntry.getAbsolutePath();
-                    list.add(filePath);
-                    var packagePath = fileEntry.getParentFile();
+            var listsPathFile = Lsec.getPathFiles(folder);
+            for (final Path fileEntry : Objects.requireNonNull(listsPathFile)) {
+                list.add(fileEntry.toString());
+                    var packagePath = fileEntry.toFile().getParentFile();
                     list.add(packagePath.toString());
-                    var fileName = FilenameUtils.removeExtension(fileEntry.getName());
+                    var fileName = FilenameUtils.removeExtension(fileEntry.toFile().getName());
                     list.add(fileName);
-
-                } else if (fileEntry.isDirectory()) {
-                    File[] childFile = fileEntry.listFiles();
-                    for (int i = 0; i < Objects.requireNonNull(childFile).length; i++){
-                        var filePath = childFile[i].getAbsolutePath();
-                        list.add(filePath);
-                        var packagePath = childFile[i].getParentFile();
-                        list.add(packagePath.toString());
-                        var fileName = FilenameUtils.removeExtension(childFile[i].getName());
-                        list.add(fileName);
-                    }
-                }
-
             }
 
         } else {
@@ -53,7 +40,6 @@ public class Jls {
                     line.append("\n");
                 }
             }
-
 
             line.append("\n");
             fileWriter.write(line.toString());

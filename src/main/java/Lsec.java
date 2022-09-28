@@ -84,11 +84,11 @@ public class Lsec {
             FileReader fr = new FileReader(pathCsvInitial);
             BufferedReader br = new BufferedReader(fr);
             String line;
-            while((line = br.readLine()) != null)
+            while((line = br.readLine()) != null &&  line.length()!=0 && !line.isBlank())
             {
                 data.add(line);
             }
-            data.add(";");
+            //data.add(";");
             return data;
         }
         catch(Exception e) {
