@@ -19,26 +19,36 @@ public class Egon {
             return hash;
         }
 
-        private static  Double getTotalNvloc (File pathFolder) throws IOException {
-            var listPath = Lsec.getPathFiles(pathFolder);
-            var  hash = getNvloc(listPath);
-            Double acc = 0.0;
-            for (Map.Entry<String, Double> entry : hash.entrySet()) {
-                acc += entry.getValue();
-            }
-            return acc;
-        }
+//        private static  Double getTotalNvloc (File pathFolder) throws IOException {
+//            var listPath = Lsec.getPathFiles(pathFolder);
+//            var  hash = getNvloc(listPath);
+//            Double acc = 0.0;
+//            for (Map.Entry<String, Double> entry : hash.entrySet()) {
+//                acc += entry.getValue();
+//            }
+//            return acc;
+//        }
 
-        public static HashMap<String, Double> getNvlocPourcentage (File pathFolder) throws IOException {
+        public static Double getNvlocAcc (File pathFolder) throws IOException {
+        var listPaths = Lsec.getPathFiles(pathFolder);
+        var acc = 0.0;
+        for (Path listPath : listPaths) {
+            acc += Nvloc.nboflines(new File(String.valueOf(listPath)));
+        }
+        return acc;
+    }
+
+
+    public static HashMap<String, Double> getNvlocPourcentage (File pathFolder) throws IOException {
             var listPath = Lsec.getPathFiles(pathFolder);
             var hash = getNvloc(listPath);
             var listPourcentage = new HashMap<String, Double>();
-            var acc = getTotalNvloc(pathFolder);
+            var acc = getNvlocAcc(pathFolder);
             for (Map.Entry<String,Double > entry : hash.entrySet()) {
                 listPourcentage.put(entry.getKey(),entry.getValue() / acc);
             }
             triHash(listPourcentage);
-            System.out.println(listPourcentage);
+           // System.out.println(listPourcentage);
             return listPourcentage;
         }
 
@@ -71,8 +81,7 @@ public class Egon {
 
         public static HashMap<String, Double>  getCsecPourcentage (File pathFolder) throws IOException {
             var pathCsv = Paths.get("").toAbsolutePath();
-            var filesCsv = Service.createPath(Objects.requireNonNull(pathCsv.toFile().listFiles()));
-            var fileCsvCsec = retourFileCsec(pathFolder);
+            var fileCsvCsec = retourFileCsv(pathFolder);
             var hashCsec =Lsec.csecFinal(pathFolder,fileCsvCsec);
             var listPourcentage = new HashMap<String, Double>();
             var acc = getTotalCsec(pathFolder,fileCsvCsec);
@@ -81,7 +90,7 @@ public class Egon {
             }
 
             triHash(listPourcentage);
-            System.out.println(listPourcentage);
+           // System.out.println(listPourcentage);
 
                 return listPourcentage;
         }
@@ -108,17 +117,23 @@ public class Egon {
             return hashNvloc;
         }
 
-        private static File retourFileCsec(File folder){
+        private static File retourFileCsv(File folder){
             var pathCsv = Paths.get("").toAbsolutePath();
             var filesCsv = Service.createPath(Objects.requireNonNull(pathCsv.toFile().listFiles()));
 
             return new File(filesCsv.get(0));
         }
+    private static File retourFileCsec(File folder){
+        var pathCsv = Paths.get("").toAbsolutePath();
+        var filesCsv = Service.createPath(Objects.requireNonNull(pathCsv.toFile().listFiles()));
+
+        return new File(filesCsv.get(1));
+    }
 
         public static List<String> filtrerSelonCsec (File folder , Double seuil) throws IOException {
             var pourcentageCsec = getCsecPourcentage(folder);
             var topPourcentageCsec = new ArrayList<String>();
-            var topPourcent = Math.floor(getCsec(folder,retourFileCsec(folder)).size() * seuil);
+            var topPourcent = Math.floor(getCsec(folder,retourFileCsv(folder)).size() * seuil);
             var count = 0;
             Iterator<Map.Entry<String, Double>> iterator = pourcentageCsec.entrySet().iterator();
             while (iterator.hasNext()) {
@@ -138,7 +153,7 @@ public class Egon {
     public static ArrayList<String> filtrerSelonNvloc (File folder , Double seuil) throws IOException {
         var pourcentageNvloc = getNvlocPourcentage(folder);
         var topPourcentageCsec = new ArrayList<String>();
-        var topPourcent = Math.floor(getCsec(folder,retourFileCsec(folder)).size() * seuil);
+        var topPourcent = Math.floor(getCsec(folder,retourFileCsv(folder)).size() * seuil);
         var count = 0;
         Iterator<Map.Entry<String, Double>> iterator = pourcentageNvloc.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -155,41 +170,85 @@ public class Egon {
 
     public  static List<String> compareMetrique(File folder , Double seuil) throws IOException {
             var listTriNvloc = filtrerSelonNvloc(folder,seuil);
-            var listTriCsec = filtrerSelonCsec(folder,seuil);
+            var listTriCsec=  filtrerListTriCsec(filtrerSelonCsec(folder,seuil));
             listTriNvloc.retainAll(listTriCsec);
-        System.out.println(listTriNvloc);
+
             return listTriNvloc;
     }
 
-
-
-        public static File creationFileEgon (File pathFolder , File fileCsvCsec) throws IOException {
-            final String currentPath = Paths.get("").toAbsolutePath().toString();
-            File csvFile = new File(currentPath,"fileEgon.csv");
-            FileWriter fileWriter = new FileWriter(csvFile);
-            var data  = filesNVLOC(pathFolder,fileCsvCsec);
-            List<String> dataCsv = new ArrayList<>();
-            StringBuilder dataFinal = new StringBuilder();
-            String line;
-            for (Map.Entry<String, Double> entry : data.entrySet()) {
-                line = entry.getKey() + entry.getValue();
-                dataCsv.add(line);
+    private static List<String> filtrerListTriCsec(List<String> liste){
+            var listeTrier = new ArrayList<String>();
+        for (String s : liste) {
+            for (int j = 0; j < s.length(); j++) {
+                listeTrier.add(s.substring(0, s.indexOf(";")));
             }
-            for (int i = 0; i < dataCsv.size(); i++) {
-                dataFinal.append(dataCsv.get(i));
-                if (i != dataCsv.size() - 1) {
-                    dataFinal.append(';');
-                    dataFinal.append("\n");
+        }
+       return listeTrier;
+
+    }
+
+    public static File egon (File pathFolder , Double seuil) throws IOException {
+        final String currentPath = Paths.get("").toAbsolutePath().toString();
+        var fileMetrique = compareMetrique(pathFolder, seuil);
+        var data = filesNVLOC(pathFolder, retourFileCsec(pathFolder));
+        File csvFile = new File(currentPath,"fileEgon.csv");
+        FileWriter fileWriter = new FileWriter(csvFile);
+        List<String> dataCsv = new ArrayList<>();
+        StringBuilder dataFinal = new StringBuilder();
+        String line;
+        for (Map.Entry<String, Double> entry : data.entrySet()) {
+            for (String s : fileMetrique) {
+                if (entry.getKey().contains(s)) {
+                    line = entry.getKey() + entry.getValue();
+                    dataCsv.add(line);
                 }
 
             }
-            dataFinal.append(';');
-            dataFinal.append("\n");
-
-            fileWriter.write(dataFinal.toString());
-            fileWriter.close();
-            return csvFile;
         }
+        for (int i = 0; i < dataCsv.size(); i++) {
+            dataFinal.append(dataCsv.get(i));
+            if (i != dataCsv.size() - 1) {
+                dataFinal.append(';');
+                dataFinal.append("\n");
+            }
+
+        }
+        dataFinal.append(';');
+        dataFinal.append("\n");
+        fileWriter.write(dataFinal.toString());
+        fileWriter.close();
+        return csvFile;
+    }
+
+
+//
+//        public static File creationFileEgon (File pathFolder , File fileCsvCsec) throws IOException {
+//            final String currentPath = Paths.get("").toAbsolutePath().toString();
+//            File csvFile = new File(currentPath,"fileEgon.csv");
+//            FileWriter fileWriter = new FileWriter(csvFile);
+//            var data  = filesNVLOC(pathFolder,fileCsvCsec);
+//            List<String> dataCsv = new ArrayList<>();
+//            StringBuilder dataFinal = new StringBuilder();
+//            String line;
+//            for (Map.Entry<String, Double> entry : data.entrySet()) {
+//                line = entry.getKey() + entry.getValue();
+//                dataCsv.add(line);
+//            }
+//            for (int i = 0; i < dataCsv.size(); i++) {
+//                dataFinal.append(dataCsv.get(i));
+//                if (i != dataCsv.size() - 1) {
+//                    dataFinal.append(';');
+//                    dataFinal.append("\n");
+//                }
+//
+//            }
+//            dataFinal.append(';');
+//            dataFinal.append("\n");
+//
+//            fileWriter.write(dataFinal.toString());
+//            fileWriter.close();
+//            return csvFile;
+//        }
 
 
 

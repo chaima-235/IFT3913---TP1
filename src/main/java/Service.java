@@ -31,15 +31,14 @@ public class Service {
         final File folderCkjm = new File("C:\\Users\\Chaima\\Desktop\\ckjm-master\\src\\gr\\spinellis\\ckjm");
         var  pathCsv = Paths.get("").toAbsolutePath();
         var listePathsCsv = createPath(Objects.requireNonNull(new File(pathCsv.toString()).listFiles()));
-
-        // Jls.csvFormat(folderCkjm);
-      // Lsec.creationFileCsec(folderCkjm, new File(listePathsCsv.get(0)));
-       //Egon.creationFileEgon(folderCkjm, new File(listePathsCsv.get(1)));
-        //Egon.getCsec(folderCkjm,new File(listePathsCsv.get(1)));
-       Egon.getCsecPourcentage(folderCkjm);
-       // Egon.filtrerFileEgon(folderCkjm,0.25);
+       Jls.csvFormat(folderComplique);
+       Lsec.creationFileCsec(folderComplique, new File(listePathsCsv.get(0)));
+       Egon.egon(folderComplique, 0.25);
+       //Egon.getCsec(folderCkjm,new File(listePathsCsv.get(1)));
+       //Egon.getCsecPourcentage(folderCkjm);
+       // /Egon.filtrerFileEgon(folderCkjm,0.25);
         //Egon.compareMetrique(folderCkjm,0.25);
-        Egon.getNvlocPourcentage(folderCkjm);
+       //Egon.getNvlocPourcentage(folderCkjm);
 
 
     }
