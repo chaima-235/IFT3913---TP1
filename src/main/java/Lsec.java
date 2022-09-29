@@ -1,5 +1,4 @@
 import org.apache.commons.io.FilenameUtils;
-import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -123,7 +122,6 @@ public class Lsec {
             line = entry.getKey() + entry.getValue();
             dataCsv.add(line);
         }
-        System.out.println("liste string "+ dataCsv);
         for (int i = 0; i < dataCsv.size(); i++) {
             dataFinal.append(dataCsv.get(i));
             if (i != dataCsv.size() - 1) {
