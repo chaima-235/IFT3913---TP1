@@ -18,6 +18,10 @@ Dépendamment du système d'exploitation utilisé pour rouler le code:
 
 -Les chemins d'accès (paths) fonctionnent peu importe le système d'exploitation, il faut juste s'assurer de bien les écrire en fonction de Windows/Mac/Linux. 
 
+-Nous avons créé une classe "Service.java" pour la fonction Main qui exécute toutes les fonctions voulues.
+
+-Les résultats de la partie 0 sont affichés dans le terminal tel que mentionné dans l'énoncé.
+
 -Il faut attendre environ 7 minutes avant que les résultats s'affichent à l'écran, voir la section "informations pertinentes" pour plus de détails. 
 
 
