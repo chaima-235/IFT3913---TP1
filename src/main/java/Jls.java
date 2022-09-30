@@ -8,30 +8,30 @@ import java.util.*;
 
 public class Jls {
 
-    public static List<String> listFilesForFolder(final File folder) throws IOException {
-        var list = new ArrayList<String>();
-        if(folder.exists()){
-            var listsPathFile = Lsec.getPathFiles(folder);
-            for (final Path fileEntry : Objects.requireNonNull(listsPathFile)) {
-                list.add(fileEntry.toString());
+    private static List<String> listFilesForFolder(final File pathFolder) throws IOException {
+        var listEntriesCsvFile = new ArrayList<String>();
+        if(pathFolder.exists()){
+            var listPathFiles = Lcsec.getPathFiles(pathFolder);
+            for (final Path fileEntry : Objects.requireNonNull(listPathFiles)) {
+                listEntriesCsvFile.add(fileEntry.toString());
                     var packagePath = fileEntry.toFile().getParentFile();
-                    list.add(packagePath.toString());
+                    listEntriesCsvFile.add(packagePath.toString());
                     var fileName = FilenameUtils.removeExtension(fileEntry.toFile().getName());
-                    list.add(fileName);
+                    listEntriesCsvFile.add(fileName);
             }
+            System.out.println(listEntriesCsvFile);
 
         } else {
             System.out.println("Votre chemin est invalide");
         }
-
-        return list;
+        return listEntriesCsvFile;
     }
 
-    public static File csvFormat(File folder) throws IOException {
-            final String currentPath = Paths.get("").toAbsolutePath().toString();
-            File csvFile = new File(currentPath,"file.csv");
-            FileWriter fileWriter = new FileWriter(csvFile);
-            var data = listFilesForFolder(folder);
+    public static File filePartie0 (File pathFolder) throws IOException {
+            var currentPath = Paths.get("").toAbsolutePath().toString();
+            var csvFile = new File(currentPath,"file.csv");
+            var fileWriter = new FileWriter(csvFile);
+            var data = listFilesForFolder(pathFolder);
             StringBuilder line = new StringBuilder();
             for (int i = 0; i < data.size(); i++) {
                 line.append(data.get(i));
