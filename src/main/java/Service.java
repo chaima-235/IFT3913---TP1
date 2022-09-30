@@ -20,13 +20,11 @@ public class Service {
 
 
     public static void main(String[] args) throws IOException {
-        final File folderComplique = new File("C:\\Users\\Chaima\\Desktop\\fuck\\src\\main\\java");
         final File folder = new File("C:\\Users\\Chaima\\Desktop\\jfreechart-master\\jfreechart-master\\src\\main\\java");
-        final File folderCkjm = new File("C:\\Users\\Chaima\\Desktop\\ckjm-master\\src\\gr\\spinellis\\ckjm");
         var pathCsv = Paths.get("").toAbsolutePath();
         var listePathsCsv = createPath(Objects.requireNonNull(new File(pathCsv.toString()).listFiles()));
-        Jls.filePartie0(folderComplique);
-        Lcsec.lcsec(folderComplique, new File(listePathsCsv.get(0)));
-        Egon.egon(folderComplique, 0.05);
+        Jls.filePartie0(folder);
+        Lcsec.lcsec(folder, new File(listePathsCsv.get(0)));
+        Egon.egon(folder, 0.05);
     }
 }

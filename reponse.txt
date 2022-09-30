@@ -1,0 +1,12 @@
+En utilisant les deux métriques nvloc (nombre de lignes de code non-vides) et csec (couplage simple entre classes) et des seuils spécifiques, 
+nous avons pu obtenir des classes suspectes d’être divines. Suite aux tests effecutés pour les seuils de 1%, 5% et 10%, nous avons remarqué que 
+notre fichier fileEgon.csv (celui qui contient les classes que l’on suspecte d’être divines) contient assez peu de classes suspectes. 
+Ceci est quand même surprenant en considérant le fait que nous avons testé 677 fichiers. Selon nous, ces deux métriques ne sont pas nécessairement 
+suffisantes pour correctement identifier les classes divines parce que nous évaluons seulement la complexité du code (nvloc) ainsi que le couplage 
+entre les classes. Bien que ce sont de bonnes métriques pour identifier ces classes, une autre métrique intéressante à évaluer afin de réellement 
+les déterminer serait la cohésion. Celle-ci mesure la qualité, la logique et la capacité d’une classe à se concentrer sur une seule fonctionnalité. 
+Dans notre cas, les classes suspectes d’être divines en se basant sur nos deux métriques seraient celles qui ont une complexité élevée (un grand nvloc) 
+et un couplage élevé. Il manquerait également le calcul de la cohésion (avec un niveau faible) pour affirmer la présence de classes divines. 
+De plus, la métrique nvloc n’est pas forcément la meilleure pour évaluer la complexité du code car nous pouvons avoir beaucoup de lignes mais 
+celles-ci ont seulement une complexité de O(1), qui est faible. Or, il est possible d’avoir moins de lignes de code mais une complexité plus haute, 
+exemple deux boucles imbriquées qui risquent d’avoir une complexité de O(n^2). La métrique nvloc ne calcule donc pas efficacement la complexité d’une classe.
