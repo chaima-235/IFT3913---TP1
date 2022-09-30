@@ -16,6 +16,12 @@ Dépendamment du système d'exploitation utilisé pour rouler le code:
   -fileCsec.csv : Partie 2
   -fileEgon.csv : Partie 3
 
+-Les fichiers CSV pour la partie 4 sont les suivants:
+  -fileEgon0.01 : seuil de 1%
+  -fileEgon0.05 : seuil de 5%
+  -fileEgon0.10 : seuil de 10%
+  
+
 -Les chemins d'accès (paths) fonctionnent peu importe le système d'exploitation, il faut juste s'assurer de bien les écrire en fonction de Windows/Mac/Linux. 
 
 -Nous avons créé une classe "Service.java" pour la fonction Main qui exécute toutes les fonctions voulues.
